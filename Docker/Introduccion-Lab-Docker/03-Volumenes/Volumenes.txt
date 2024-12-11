@@ -1,0 +1,69 @@
+1. Host Volume (Bind Mount)
+Un Bind Mount mapea un directorio específico del sistema anfitrión al contenedor. Esto es útil en desarrollo, cuando deseas que los cambios en el host se reflejen inmediatamente en el contenedor.
+
+Ejemplo:
+
+bash
+Copiar código
+docker run -d --name contenedor_bind_mount \
+  -v /ruta/en/el/host:/ruta/en/el/contenedor \
+  ubuntu
+Explicación:
+
+/ruta/en/el/host: La ruta en tu sistema (host).
+/ruta/en/el/contenedor: La ruta dentro del contenedor donde se montará la carpeta del host.
+Ejemplo práctico:
+
+bash
+Copiar código
+docker run -d --name web_bind_mount \
+  -v $(pwd)/website:/usr/share/nginx/html \
+  -p 8080:80 nginx
+En este ejemplo, si tienes archivos HTML en $(pwd)/website (carpeta actual), estarán accesibles en el contenedor a través de Nginx. Si editas estos archivos en el host, los cambios se reflejarán inmediatamente en el contenedor.
+
+2. Anonymous Volume
+Un volumen anónimo se utiliza cuando no necesitas que el volumen persista fuera del ciclo de vida del contenedor. Docker lo crea con un nombre temporal y se elimina cuando el contenedor se borra (a menos que se configure de otra manera).
+
+Ejemplo:
+
+bash
+Copiar código
+docker run -d --name contenedor_anonimo \
+  -v /ruta/en/el/contenedor \
+  ubuntu
+En este ejemplo, Docker creará un volumen anónimo para /ruta/en/el/contenedor en el contenedor. No necesitas especificar una ruta en el host.
+
+Ejemplo práctico:
+
+bash
+Copiar código
+docker run -d --name db_anonymous_volume \
+  -v /var/lib/mysql \
+  mysql
+Este comando crea un volumen temporal para almacenar los datos de MySQL en el contenedor. Al detener y eliminar el contenedor, los datos se perderán, a menos que configures algo para preservarlos.
+
+3. Named Volume
+Un volumen nombrado se utiliza cuando necesitas persistencia de datos que se pueden reutilizar entre contenedores. Docker gestiona estos volúmenes y los almacena en una ubicación específica en el sistema del host.
+
+Ejemplo:
+
+bash
+Copiar código
+docker volume create mi_volumen
+docker run -d --name contenedor_con_volumen \
+  -v mi_volumen:/ruta/en/el/contenedor \
+  ubuntu
+Explicación:
+
+mi_volumen: Es el nombre del volumen que Docker gestionará.
+/ruta/en/el/contenedor: La ruta dentro del contenedor donde se montará el volumen.
+Ejemplo práctico:
+
+bash
+Copiar código
+docker volume create postgres_data
+docker run -d --name db_named_volume \
+  -v postgres_data:/var/lib/postgresql/data \
+  postgres
+En este ejemplo, el volumen postgres_data guarda los datos de la base de datos en el host, permitiendo que esos datos persistan incluso si el contenedor de PostgreSQL es eliminado. Al reiniciar el contenedor, puedes usar el mismo volumen para acceder a los datos anteriores.
+

@@ -1,0 +1,74 @@
+La seguridad en imágenes Docker es fundamental, especialmente cuando se despliegan aplicaciones en producción. Aquí tienes algunas buenas prácticas de seguridad a tener en cuenta al crear y gestionar imágenes Docker:
+
+1. Usa imágenes oficiales y de fuentes confiables
+Descarga imágenes solo desde Docker Hub o repositorios oficiales. Las imágenes oficiales suelen estar mejor mantenidas y revisadas.
+Evita imágenes sin verificación de seguridad o sin muchos "pulls" o "stars", ya que pueden contener vulnerabilidades o configuraciones inseguras.
+
+2. Minimiza el tamaño de la imagen
+Usa imágenes base ligeras, como alpine o imágenes específicas de tu lenguaje o framework (python:alpine, node:alpine), para reducir la superficie de ataque.
+Elimina archivos innecesarios (cachés de paquetes, archivos temporales) después de instalar dependencias con comandos como rm -rf /var/lib/apt/lists/* en sistemas Debian/Ubuntu.
+
+3. Mantén tus imágenes actualizadas
+Actualiza tus imágenes regularmente para incluir los últimos parches de seguridad.
+Rebuild tus imágenes periódicamente para asegurarte de tener las versiones más recientes de las dependencias.
+
+4. Usa el menor privilegio posible
+Evita ejecutar contenedores como root. Añade un usuario no privilegiado en tu Dockerfile para reducir los riesgos si el contenedor es comprometido.
+Ejemplo:
+dockerfile
+Copiar código
+RUN useradd -m myuser
+USER myuser
+También puedes usar la opción --user al ejecutar el contenedor:
+bash
+Copiar código
+docker run --user 1001 myimage
+
+5. Evita exponer puertos innecesarios
+Expón solo los puertos que realmente necesita tu aplicación. Evita el uso de puertos elevados (como 80 o 443) si no son necesarios para el funcionamiento interno.
+
+6. Utiliza variables de entorno seguras
+No incluyas secretos o claves sensibles directamente en el Dockerfile o en variables de entorno.
+Usa servicios de gestión de secretos, como AWS Secrets Manager o HashiCorp Vault, para manejar variables sensibles y pásalas al contenedor de manera segura.
+
+7. Escanea la imagen en busca de vulnerabilidades
+Usa herramientas como Docker Bench Security, Clair, Trivy o Aqua Security para escanear tus imágenes en busca de vulnerabilidades conocidas.
+Algunos servicios en la nube, como AWS ECR y GCP Container Registry, ofrecen escaneo de vulnerabilidades para imágenes almacenadas.
+
+8. Limita las capacidades del contenedor
+Usa el flag --cap-drop para eliminar capacidades innecesarias de Linux y reducir el nivel de privilegio de los contenedores.
+Ejemplo:
+bash
+Copiar código
+docker run --cap-drop=ALL myimage
+También puedes usar --cap-add para añadir solo las capacidades estrictamente necesarias.
+
+9. Configura políticas de red restrictivas
+Usa redes privadas para contenedores que no necesiten acceso a la red externa.
+Limita la exposición de los contenedores a través de configuraciones de firewall y utiliza políticas de red en Kubernetes o Docker Compose.
+
+10. Firma y verifica imágenes
+Usa Docker Content Trust (DCT) para firmar tus imágenes y verificar su autenticidad antes de ejecutarlas. Esto ayuda a asegurar que la imagen no fue manipulada.
+Activa DCT con:
+bash
+Copiar código
+export DOCKER_CONTENT_TRUST=1
+
+11. Evita los comandos sudo o comandos innecesarios de shell
+Usa comandos RUN eficientes y evita llamar a comandos que puedan ser un riesgo o innecesarios.
+En lugar de varios RUN, agrupa los comandos en uno solo para reducir el número de capas.
+
+12. Limita el acceso al sistema de archivos
+Usa la opción --read-only al iniciar el contenedor para evitar que el sistema de archivos sea modificado (salvo donde se necesiten volúmenes específicos de escritura).
+Ejemplo:
+bash
+Copiar código
+docker run --read-only myimage
+Resumen de Buenas Prácticas
+Usa imágenes oficiales y mantenlas actualizadas.
+Minimiza permisos y privilegios, evitando root.
+Escanea tus imágenes regularmente.
+Limita puertos y capacidades.
+Gestiona los secretos de forma segura, usando servicios externos.
+Firma tus imágenes para asegurar su autenticidad.
+Seguir estas prácticas te ayudará a reducir riesgos y mejorar la seguridad de tus imágenes Docker.

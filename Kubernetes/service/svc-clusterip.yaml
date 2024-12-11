@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ #annotations:
+   #kubernetes.io/change-cause: "Actualización del Deployment: agregado ports:"
+ name: nginx-backend
+ labels:
+   app: backend
+spec:
+ replicas: 3
+ selector:
+   matchLabels:
+     app: backend
+ template:
+   metadata:
+     name: nginx-backend
+     labels:
+       app: backend
+   spec:
+     containers:
+     - name: nginx01
+       image: nginx
+       ports:
+       - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-nginx-ci
+  labels:
+    app: backend
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80

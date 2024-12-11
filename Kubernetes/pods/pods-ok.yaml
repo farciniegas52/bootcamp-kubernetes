@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pods
+spec:
+  containers:
+  - name: nginx01
+    image: nginx
+    command: ['sh', '-c', 'echo contendor01 > /usr/share/nginx/html/index.html && nginx -g "daemon off;"']
+  - name: python
+    image: python:3.6-alpine
+    command: ['sh', '-c', 'echo contenedor02 > index.html && python -m http.server 8082']

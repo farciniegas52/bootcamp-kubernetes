@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ #annotations:
+   #kubernetes.io/change-cause: "Actualización del Deployment: agregado ports:"
+ name: nginx-prueba
+ labels:
+   app: front
+spec:
+ replicas: 3
+ selector:
+   matchLabels:
+     app: front
+ template:
+   metadata:
+     name: nginx-pods
+     labels:
+       app: front
+   spec:
+     containers:
+     - name: nginx01
+       image: nginx
+       ports:
+       - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-nginx
+  labels:
+    app: front
+spec:
+  selector:
+    app: front
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 80

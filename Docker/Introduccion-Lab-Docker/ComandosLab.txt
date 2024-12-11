@@ -1,0 +1,106 @@
+# Comandos Laboratorio Docker
+-- 01-DOCKERFILE
+# Descargar una imagen
+docker pull
+
+docker pull nginx
+
+# Compilar imagen apartir del Dockerfile.
+docker build -t nginx-rocky .
+# Ver la imagen creada.
+docker images
+
+-- 02-DOCKER.
+# Ver docker
+docker ps
+docker ps -a
+# Ejecutar un contedor.
+docker run -d --name centos01 centos
+docker run -d --name ubuntu01 ubuntu tail -f /dev/null
+
+# Ejecutar comandos dentro de un docker.
+docker exec -it centos01 /bin/bash
+-- apt-get update && apt-get install -y iputils-ping
+docker exec -it centos001 bash -c "ping 172.19.0.2"
+docker exec -it centos01 ls /
+#Parar un contenedor
+docker stop centos01
+#Iniciar un contendor 
+docker start centos01
+# Reiniciar un contenedor
+docker restart centos01
+# Ver la informacionde un contenedor
+docker inspect centos01
+# Informacion del servicio de Docker.
+docker info
+
+-- 03-DOCKER VOLUMENES
+#Listar volumenes creados
+docker volume ls
+#Crear un volumen
+docker volume create docker
+#Eliminar un volumen
+docker volume rm docker
+
+
+#Creacion contenedor con MySql
+docker run -d --name mysql01 -e MYSQL_ROOT_PASSWORD=1234567890 -p 3306:3306  mysql 
+docker exec -it mysql01 mysql -u root -p
+show databases;
+create database docker;
+show databases;
+#Eliminar contenedor MySql
+docker rm -f mysql01
+docker run -d --name mysql01 -e MYSQL_ROOT_PASSWORD=1234567890 -p 3306:3306  mysql 
+show databases;
+
+#Volumenes de host
+OJO (pwd)
+docker rm -f mysql01
+mkdir mysql
+docker run -d --name mysql01 -e MYSQL_ROOT_PASSWORD=1234567890 -v /root/docker/volumenes/mysql:/var/lib/mysql -p 3306:3306  mysql
+docker exec -it mysql01 mysql -u root -p
+show databases;
+create database docker;
+show databases;
+quit;
+
+docker rm -f mysql01
+
+#Volumenes de Anonymous
+#Elimina todos los contenedores --- Cuidado :(
+Importante
+docker volume ls -f dangling=true
+
+
+docker rm -fv $(docker ps -aq)
+docker run -d --name mysql01 -e MYSQL_ROOT_PASSWORD=1234567890 -v /var/lib/mysql -p 3306:3306  mysql
+docker exec -it mysql01 mysql -u root -p
+docker rm -f mysql01
+
+#Volumenes nombredos.
+docker volume create docker
+docker run -d --name mysql01 -e MYSQL_ROOT_PASSWORD=1234567890 -v docker:/var/lib/mysql -p 3306:3306  mysql
+docker exec -it mysql01 mysql -u root -p
+show databases;
+create database docker;
+show databases;
+quit;
+docker rm -f mysql01
+
+#Compartir Volumenes entre contenedores. Hora - Nginx
+docker build -t hora .
+docker images
+docker volume create share
+docker volume ls
+
+docker run -d -v share:/opt --name hora hora
+docker exec -it hora /bin/bash
+
+docker run -d --name nginx -v share:/usr/share/nginx/html -p 8080:80 nginx
+docker exec -it nginx /bin/bash
+
+# Volumenes dangling
+docker volume rm $(docker volume ls -f dangling=true -q)
+
+

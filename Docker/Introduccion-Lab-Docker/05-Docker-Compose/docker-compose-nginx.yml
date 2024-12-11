@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  hora:
+    container_name: hora
+    image: generarhora
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+    mem_limit: 50m
+    cpuset: "1"
+    restart: always
+    networks:
+      - net_hora
+    volumes: 
+      - vol_share:/opt
+
+  nginx:
+    container_name: nginx
+    image: nginx
+    depends_on:
+      - hora
+    networks:
+      - net_hora
+    volumes: 
+      - vol_share:/usr/share/nginx/html
+    ports: 
+      - 8085:80
+
+volumes:
+  vol_share:
+
+networks:
+  net_hora:
