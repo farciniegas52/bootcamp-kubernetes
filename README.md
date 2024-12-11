@@ -15,7 +15,7 @@ El objetivo es brindarte las herramientas y conocimientos necesarios para entend
 4. **Redes en Docker (Networking)** 🌐
 5. **Docker Compose** 🛠️
 
-🎥 **Grabaciones:** [Introducción a Docker - Grabaciones](https://drive.google.com/drive/u/0/folders/1-jfC-iqDs0VngQpsKvzzFC2X_xvoraWj)
+🎥 **Grabaciones:** [Drive Introducción a Docker - Grabaciones]
 
 ---
 
@@ -26,7 +26,7 @@ El objetivo es brindarte las herramientas y conocimientos necesarios para entend
 4. **ReplicaSets** 🔁
 5. **Servicios (Services)** 🌐
 
-🎥 **Grabaciones:** [Introducción a Kubernetes - Grabaciones](https://drive.google.com/drive/u/0/folders/1-jfC-iqDs0VngQpsKvzzFC2X_xvoraWj)
+🎥 **Grabaciones:** [Drive - Introducción a Kubernetes - Grabaciones]
 
 ---
 
