@@ -54,4 +54,16 @@ Este BootCamp está diseñado para que avances a tu propio ritmo. Sigue las grab
 
 ---
 
+### 🎯 **Sesión de Retos**
+🧩 **Muy pronto** 🚧
+
+---
+
+---
+
+## 🧑‍💻 **Sobre nosotros: Chapter CloudOps - Pragma**
+Este BootCamp es liderado por el **Chapter CloudOps** de **Pragma**, un equipo apasionado por la tecnología en la nube y las mejores prácticas en infraestructura. Estamos aquí para ayudarte a dar tus primeros pasos en el mundo de Kubernetes y CloudOps.
+
+
+---
 ¡Te esperamos para que des el primer paso en tu camino hacia dominar Kubernetes! 🛡️
